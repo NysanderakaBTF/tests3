@@ -53,3 +53,14 @@ async def test_db_update_question():
     assert updated_question.question == "Alla?"
     assert updated_question.answer == "Alla!!"
     assert updated_question.id == question.id
+
+@pytest.mark.asyncio
+async def test_db_delete_question():
+    question = await DBService.create_question(
+        question="Alla?",
+        answer="Who",
+    )
+
+    deleted_question = await DBService.delete_question(id=question.id)
+
+    assert isinstance(deleted_question, None)
