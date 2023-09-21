@@ -21,3 +21,13 @@ async def test_get_question():
         data = json.loads(websocket.receive_json())
         assert data is not None
         assert list(data.keys()) == ["question"]
+
+@pytest.mark.asyncio
+async def test_post_answer():
+    client = TestClient(app)
+    with client.websocket_connect('/ws') as websocket:
+        data = json.loads(websocket.receive_json())
+        websocket.send_json("Alla")
+        data = json.loads(websocket.receive_json())
+        assert data is not None
+        assert list(data.keys()) == ["answer", "question"]
