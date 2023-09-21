@@ -64,3 +64,12 @@ async def test_db_delete_question():
     deleted_question = await DBService.delete_question(id=question.id)
 
     assert deleted_question is None
+
+@pytest.mark.asyncio
+async def test_get_random_question():
+    question = await DBService.get_random_question()
+
+    assert isinstance(question, Question)
+    assert question.question is not None
+    assert question.answer is not None
+    assert question.id is not None
