@@ -1,3 +1,5 @@
+import random
+
 from models.models import Question
 
 
@@ -27,3 +29,9 @@ class DBService:
     async def delete_question(cls, id):
         await Question.filter(id=id).delete()
         return None
+
+    @classmethod
+    async def get_random_question(cls):
+        q = await Question.filter().all()
+        return q[random.randint(0, len(q))]
+
