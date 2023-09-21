@@ -22,3 +22,8 @@ class DBService:
         q.answer = answer
         await q.save()
         return q
+
+    @classmethod
+    async def delete_question(cls, id):
+        await Question.filter(id=id).delete()
+        return None

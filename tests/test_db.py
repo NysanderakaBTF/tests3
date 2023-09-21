@@ -58,9 +58,9 @@ async def test_db_update_question():
 async def test_db_delete_question():
     question = await DBService.create_question(
         question="Alla?",
-        answer="Who",
+        answer="Who7",
     )
 
     deleted_question = await DBService.delete_question(id=question.id)
 
-    assert isinstance(deleted_question, None)
+    assert deleted_question is None
