@@ -35,3 +35,21 @@ async def test_db_create_question():
     assert question.answer == "Who"
     assert question.id is not None
 
+
+@pytest.mark.asyncio
+async def test_db_update_question():
+    question = await DBService.create_question(
+        question="Alla?",
+        answer="Who",
+    )
+
+    updated_question = await DBService.update_question(
+        id=question.id,
+        question="Alla?",
+        answer="Alla!!",
+    )
+
+    assert isinstance(updated_question, Question)
+    assert updated_question.question == "Alla?"
+    assert updated_question.answer == "Alla!!"
+    assert updated_question.id == question.id
