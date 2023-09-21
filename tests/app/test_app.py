@@ -1,4 +1,5 @@
 import asyncio
+import json
 
 import pytest
 from starlette.testclient import TestClient
@@ -17,6 +18,6 @@ def execute_before_any_test():
 async def test_get_question():
     client = TestClient(app)
     with client.websocket_connect('/ws') as websocket:
-        data = await websocket.receive_json()
+        data = json.loads(websocket.receive_json())
         assert data is not None
-        assert data.keys() == ["question"]
+        assert list(data.keys()) == ["question"]
