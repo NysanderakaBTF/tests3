@@ -6,7 +6,7 @@ from db_service import DBService
 from models.models import Question, init
 
 
-@pytest.fixture(autouse=True, scope='function')
+@pytest.fixture(autouse=True, scope='session')
 def execute_before_any_test():
     print("Executing before any test")
     asyncio.run(init())
@@ -23,4 +23,15 @@ async def test_db_get_questions():
         assert isinstance(get_all[0], Question)
 
 
+@pytest.mark.asyncio
+async def test_db_create_question():
+    question = await DBService.create_question(
+        question="Alla?",
+        answer="Who",
+    )
+
+    assert isinstance(question, Question)
+    assert question.question == "Alla?"
+    assert question.answer == "Who"
+    assert question.id is not None
 
