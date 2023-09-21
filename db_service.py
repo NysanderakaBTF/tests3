@@ -14,3 +14,11 @@ class DBService:
         q = Question(question=question, answer=answer)
         await q.save()
         return q
+
+    @classmethod
+    async def update_question(cls, id, question, answer):
+        q = await Question.get(id=id)
+        q.question = question
+        q.answer = answer
+        await q.save()
+        return q
