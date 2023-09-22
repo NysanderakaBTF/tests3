@@ -95,3 +95,7 @@ async def update_question(id: int, question: QuestionUpdate):
     return
 
 
+@app.delete("/questions/{id}")
+async def delete_question(id: int):
+    await DBService.delete_question(id)
+    return {"message": "Question deleted"}

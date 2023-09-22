@@ -12,7 +12,6 @@ from models.models import init
 
 @pytest.fixture(autouse=True, scope='session')
 def execute_before_any_test():
-    print("Executing before any test")
     asyncio.run(init())
 
 
@@ -89,6 +88,16 @@ async def test_delete_question():
     q = await DBService.create_question("test", "test")
 
     async with AsyncClient(app=app, base_url='http://localhost:8000') as client:
-        response = await client.delete("/questions/"+q.id)
+        response = await client.delete("/questions/"+str(q.id))
+        assert response.status_code == 200
+        assert response.json() == {"message": "Question deleted"}
+
+@pytest.mark.asyncio
+async def test_delete_question_no_exist():
+
+    q = await DBService.create_question("test", "test")
+
+    async with AsyncClient(app=app, base_url='http://localhost:8000') as client:
+        response = await client.delete("/questions/999999999")
         assert response.status_code == 200
         assert response.json() == {"message": "Question deleted"}
