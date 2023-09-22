@@ -17,7 +17,6 @@ async def test_db_get_questions():
     get_all = await DBService.get_all_questions()
     print(get_all)
 
-
     assert isinstance(get_all, list)
     if (len(get_all) > 0):
         assert isinstance(get_all[0], Question)
@@ -54,6 +53,7 @@ async def test_db_update_question():
     assert updated_question.answer == "Alla!!"
     assert updated_question.id == question.id
 
+
 @pytest.mark.asyncio
 async def test_db_delete_question():
     question = await DBService.create_question(
@@ -64,6 +64,7 @@ async def test_db_delete_question():
     deleted_question = await DBService.delete_question(id=question.id)
 
     assert deleted_question is None
+
 
 @pytest.mark.asyncio
 async def test_get_random_question():

@@ -33,5 +33,7 @@ class DBService:
     @classmethod
     async def get_random_question(cls):
         q = await Question.filter().all()
-        return q[random.randint(0, len(q))]
+        if len(q) == 0:
+            return []
+        return random.choice(q)
 
