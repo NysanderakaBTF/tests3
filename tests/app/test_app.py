@@ -82,3 +82,13 @@ async def test_update_question2():
         data = {"question": "What is the capital of Germany?", "answer": "Berlin"}
         response = await client.put("/questions/99999999", json=data)
         assert response.status_code == 404
+
+@pytest.mark.asyncio
+async def test_delete_question():
+
+    q = await DBService.create_question("test", "test")
+
+    async with AsyncClient(app=app, base_url='http://localhost:8000') as client:
+        response = await client.delete("/questions/"+q.id)
+        assert response.status_code == 200
+        assert response.json() == {"message": "Question deleted"}

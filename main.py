@@ -92,4 +92,6 @@ async def update_question(id: int, question: QuestionUpdate):
     q = await DBService.update_question(id, question.question, question.answer)
     if q is None:
         raise HTTPException(status_code=404, detail="Question not found")
-    return q
+    return
+
+
