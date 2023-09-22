@@ -76,3 +76,9 @@ async def test_update_question():
         assert response.json()["question"] == "What is the capital of Germany?"
         assert response.json()["answer"] == "Berlin"
 
+@pytest.mark.asyncio
+async def test_update_question2():
+    async with AsyncClient(app=app, base_url='http://localhost:8000') as client:
+        data = {"question": "What is the capital of Germany?", "answer": "Berlin"}
+        response = await client.put("/questions/99999999", json=data)
+        assert response.status_code == 404

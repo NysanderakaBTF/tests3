@@ -1,7 +1,7 @@
 import asyncio
 from typing import List
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from starlette.websockets import WebSocket, WebSocketDisconnect
 from tortoise.contrib.pydantic import pydantic_model_creator
@@ -84,4 +84,12 @@ async def get_all_questions():
 @app.post("/questions", response_model=QuestionResponse)
 async def create_question(question: QuestionCreate):
     q = await DBService.create_question(question.question, question.answer)
+    return q
+
+
+@app.put("/questions/{id}", response_model=QuestionResponse)
+async def update_question(id: int, question: QuestionUpdate):
+    q = await DBService.update_question(id, question.question, question.answer)
+    if q is None:
+        raise HTTPException(status_code=404, detail="Question not found")
     return q

@@ -1,5 +1,7 @@
 import random
 
+from tortoise.exceptions import DoesNotExist
+
 from models.models import Question
 
 
@@ -19,7 +21,10 @@ class DBService:
 
     @classmethod
     async def update_question(cls, id, question, answer):
-        q = await Question.get(id=id)
+        try:
+            q = await Question.get(id=id)
+        except DoesNotExist:
+            return None
         q.question = question
         q.answer = answer
         await q.save()
