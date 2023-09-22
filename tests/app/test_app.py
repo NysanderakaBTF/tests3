@@ -60,10 +60,19 @@ async def test_get_all_questions():
 
 @pytest.mark.asyncio
 async def test_create_question():
-    async with AsyncClient(app=app) as client:
+    async with AsyncClient(app=app, base_url='http://localhost:8000') as client:
         data = {"question": "https://th.bing.com/th/id/OIP.-5DjlgC_p1i9w2sWFRkmQQHaDQ?pid=ImgDet&rs=1", "answer": "MVC"}
         response = await client.post("/questions", json=data)
         assert response.status_code == 200
         assert response.json()["question"] == "https://th.bing.com/th/id/OIP.-5DjlgC_p1i9w2sWFRkmQQHaDQ?pid=ImgDet&rs=1"
         assert response.json()["answer"] == "MVC"
+
+@pytest.mark.asyncio
+async def test_update_question():
+    async with AsyncClient(app=app, base_url='http://localhost:8000') as client:
+        data = {"question": "What is the capital of Germany?", "answer": "Berlin"}
+        response = await client.put("/questions/1", json=data)
+        assert response.status_code == 200
+        assert response.json()["question"] == "What is the capital of Germany?"
+        assert response.json()["answer"] == "Berlin"
 
