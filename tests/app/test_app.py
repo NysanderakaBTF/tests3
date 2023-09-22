@@ -58,3 +58,12 @@ async def test_get_all_questions():
         assert response.status_code == 200
         assert type(response.json()) is list
 
+@pytest.mark.asyncio
+async def test_create_question():
+    async with AsyncClient(app=app) as client:
+        data = {"question": "https://th.bing.com/th/id/OIP.-5DjlgC_p1i9w2sWFRkmQQHaDQ?pid=ImgDet&rs=1", "answer": "MVC"}
+        response = await client.post("/questions", json=data)
+        assert response.status_code == 200
+        assert response.json()["question"] == "https://th.bing.com/th/id/OIP.-5DjlgC_p1i9w2sWFRkmQQHaDQ?pid=ImgDet&rs=1"
+        assert response.json()["answer"] == "MVC"
+
