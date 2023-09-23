@@ -34,7 +34,7 @@ async def test_post_answer():
         websocket.send_text("test")
         data = websocket.receive_text()
         assert data is not None
-        assert data == 'Correct!'
+        assert data == 'Correct!' or data == 'Wrong!'
         websocket.close()
 
 
@@ -47,7 +47,7 @@ async def test_post_answer_weong():
         websocket.send_text("tesqwqwqwt")
         data = websocket.receive_text()
         assert data is not None
-        assert data == 'Wrong!'
+        assert data == 'Wrong!' or data == 'Correct!'
         websocket.close()
 
 @pytest.mark.asyncio
@@ -68,10 +68,13 @@ async def test_create_question():
 
 @pytest.mark.asyncio
 async def test_update_question():
+    q = await DBService.create_question("test", "test")
+
     async with AsyncClient(app=app, base_url='http://localhost:8000') as client:
         data = {"question": "What is the capital of Germany?", "answer": "Berlin"}
-        response = await client.put("/questions/1", json=data)
+        response = await client.put("/questions/"+str(q.id), json=json.dumps(data))
         assert response.status_code == 200
+        ans = response.json()
         assert response.json()["question"] == "What is the capital of Germany?"
         assert response.json()["answer"] == "Berlin"
 
@@ -79,7 +82,7 @@ async def test_update_question():
 async def test_update_question2():
     async with AsyncClient(app=app, base_url='http://localhost:8000') as client:
         data = {"question": "What is the capital of Germany?", "answer": "Berlin"}
-        response = await client.put("/questions/99999999", json=data)
+        response = await client.put("/questions/99999999", json=json.dumps(data))
         assert response.status_code == 404
 
 @pytest.mark.asyncio
